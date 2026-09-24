@@ -17,6 +17,7 @@ type Props = {
 export function PdfViewer({ doc }: Props) {
   const pdfBlob = useLiveQuery(() => db.pdfBlobs.get(doc.id), [doc.id])
   const [currentPage, setCurrentPage] = useState(doc.currentPage)
+  const [zoom, setZoom] = useState(1)
   const { selection, containerRef, clearSelection } = useTextSelection()
   const customTextRenderer = useTermHighlight(doc.id)
 
@@ -39,6 +40,8 @@ export function PdfViewer({ doc }: Props) {
         currentPage={currentPage}
         pageCount={doc.pageCount}
         onPageChange={handlePageChange}
+        zoom={zoom}
+        onZoomChange={setZoom}
       />
       <div ref={containerRef} className="relative flex-1 overflow-auto bg-gray-100 p-4">
         <div className="mx-auto w-fit">
@@ -52,7 +55,7 @@ export function PdfViewer({ doc }: Props) {
           >
             <Page
               pageNumber={currentPage}
-              width={800}
+              width={800 * zoom}
               customTextRenderer={customTextRenderer}
             />
           </Document>
