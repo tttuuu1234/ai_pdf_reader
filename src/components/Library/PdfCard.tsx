@@ -31,7 +31,7 @@ export function PdfCard({ doc }: Props) {
       {/* 進捗バー */}
       <div className="mt-1.5 h-1.5 rounded-full bg-gray-200">
         <div
-          className="h-full rounded-full bg-blue-500 transition-all"
+          className="h-full rounded-full bg-gray-600 transition-all"
           style={{ width: `${progress}%` }}
         />
       </div>

@@ -48,7 +48,7 @@ export function HistoryTab() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="用語を検索..."
-          className="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+          className="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-gray-500 focus:outline-none"
         />
       </div>
 

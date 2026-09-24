@@ -22,7 +22,7 @@ export function ChatPanel() {
             onClick={() => setActiveTab('conversation')}
             className={`rounded-md px-3 py-1 text-sm ${
               activeTab === 'conversation'
-                ? 'bg-blue-100 font-medium text-blue-700'
+                ? 'bg-gray-200 font-medium text-gray-800'
                 : 'text-gray-500 hover:bg-gray-100'
             }`}
           >
@@ -32,7 +32,7 @@ export function ChatPanel() {
             onClick={() => setActiveTab('history')}
             className={`rounded-md px-3 py-1 text-sm ${
               activeTab === 'history'
-                ? 'bg-blue-100 font-medium text-blue-700'
+                ? 'bg-gray-200 font-medium text-gray-800'
                 : 'text-gray-500 hover:bg-gray-100'
             }`}
           >

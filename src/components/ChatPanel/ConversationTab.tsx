@@ -66,10 +66,8 @@ export function ConversationTab() {
           <MessageBubble key={msg.id} message={msg} />
         ))}
         {streamingText !== null && (
-          <div className="flex justify-start">
-            <div className="max-w-[85%] rounded-lg bg-gray-100 px-3 py-2 text-sm whitespace-pre-wrap text-gray-800">
-              {streamingText || <LoadingIndicator />}
-            </div>
+          <div className="text-sm leading-relaxed text-gray-700 whitespace-pre-wrap">
+            {streamingText || <LoadingIndicator />}
           </div>
         )}
         {isLoading && streamingText === null && <LoadingIndicator />}
@@ -86,13 +84,13 @@ export function ConversationTab() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="追加で質問する..."
-            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none"
             disabled={isLoading}
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-40"
+            className="rounded-lg bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-900 disabled:opacity-40"
           >
             送信
           </button>

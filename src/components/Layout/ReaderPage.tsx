@@ -45,7 +45,7 @@ export function ReaderPage() {
     return (
       <div className="flex h-screen flex-col items-center justify-center gap-4 text-gray-500">
         <p>ドキュメントが見つかりません</p>
-        <Link to="/" className="text-blue-600 hover:underline">本棚に戻る</Link>
+        <Link to="/" className="text-gray-600 hover:underline">本棚に戻る</Link>
       </div>
     )
   }
