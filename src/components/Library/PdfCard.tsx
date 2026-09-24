@@ -14,10 +14,18 @@ export function PdfCard({ doc }: Props) {
       to={`/read/${doc.id}`}
       className="block rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md"
     >
-      {/* 表紙プレースホルダー */}
-      <div className="flex h-40 items-center justify-center rounded bg-gray-100 text-4xl text-gray-400">
-        PDF
-      </div>
+      {/* 表紙サムネイル */}
+      {doc.thumbnail ? (
+        <img
+          src={doc.thumbnail}
+          alt={doc.name}
+          className="h-40 w-full rounded object-cover object-top"
+        />
+      ) : (
+        <div className="flex h-40 items-center justify-center rounded bg-gray-100 text-4xl text-gray-400">
+          PDF
+        </div>
+      )}
 
       <h3 className="mt-3 truncate text-sm font-medium text-gray-900" title={doc.name}>
         {doc.name}

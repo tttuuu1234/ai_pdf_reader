@@ -6,6 +6,30 @@ import { db } from '../../stores/db'
 import type { PdfDoc } from '../../types'
 import { PdfCard } from './PdfCard'
 
+async function generateThumbnail(data: ArrayBuffer): Promise<string> {
+  const pdf = await pdfjs.getDocument({
+    data: data.slice(0),
+    cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@6.3.289/cmaps/',
+    cMapPacked: true,
+  }).promise
+  const page = await pdf.getPage(1)
+
+  const scale = 200 / page.getViewport({ scale: 1 }).width
+  const viewport = page.getViewport({ scale })
+
+  const canvas = document.createElement('canvas')
+  canvas.width = viewport.width
+  canvas.height = viewport.height
+
+  await page.render({
+    canvas,
+    canvasContext: canvas.getContext('2d')!,
+    viewport,
+  }).promise
+
+  return canvas.toDataURL('image/jpeg', 0.7)
+}
+
 export function Library() {
   const docs = useLiveQuery(() => db.docs.orderBy('addedAt').reverse().toArray())
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -16,15 +40,22 @@ export function Library() {
 
     const arrayBuffer = await file.arrayBuffer()
 
-    // pdf.js でページ数を取得
     const pdf = await pdfjs.getDocument({ data: arrayBuffer.slice(0) }).promise
     const pageCount = pdf.numPages
+
+    let thumbnail: string | undefined
+    try {
+      thumbnail = await generateThumbnail(arrayBuffer)
+    } catch {
+      // サムネイル生成に失敗してもPDF追加は続行
+    }
 
     const doc: PdfDoc = {
       id: nanoid(),
       name: file.name.replace(/\.pdf$/i, ''),
       pageCount,
       currentPage: 1,
+      thumbnail,
       addedAt: Date.now(),
     }
 
@@ -33,7 +64,6 @@ export function Library() {
       await db.pdfBlobs.add({ docId: doc.id, blob: arrayBuffer })
     })
 
-    // input をリセット（同じファイルを再選択できるように）
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 

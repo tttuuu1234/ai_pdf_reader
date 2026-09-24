@@ -5,6 +5,8 @@ export type PdfDoc = {
   pageCount: number
   /** 最後に開いていたページ番号（1始まり）。 */
   currentPage: number
+  /** 1ページ目のサムネイル（data URL）。 */
+  thumbnail?: string
   addedAt: number
 }
 
