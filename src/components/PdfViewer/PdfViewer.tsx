@@ -46,6 +46,7 @@ export function PdfViewer({ doc }: Props) {
             <Page
               pageNumber={currentPage}
               width={800}
+              customTextRenderer={customTextRenderer}
             />
           </Document>
         </div>
