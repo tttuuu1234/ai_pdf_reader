@@ -42,7 +42,14 @@ export function PdfViewer({ doc }: Props) {
       />
       <div ref={containerRef} className="relative flex-1 overflow-auto bg-gray-100 p-4">
         <div className="mx-auto w-fit">
-          <Document file={{ data: pdfBlob.blob }} loading={null}>
+          <Document
+            file={{ data: pdfBlob.blob }}
+            loading={null}
+            options={{
+              cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@6.3.289/cmaps/',
+              cMapPacked: true,
+            }}
+          >
             <Page
               pageNumber={currentPage}
               width={800}
