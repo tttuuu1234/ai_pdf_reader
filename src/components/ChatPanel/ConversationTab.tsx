@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import Markdown from 'react-markdown'
 import { useAiChat } from '../../hooks/useAiChat'
 import { useThread } from '../../hooks/useThread'
 import { useChatStore } from '../../stores/useChatStore'
@@ -66,9 +67,13 @@ export function ConversationTab() {
           <MessageBubble key={msg.id} message={msg} />
         ))}
         {streamingText !== null && (
-          <div className="text-sm leading-relaxed text-gray-700 whitespace-pre-wrap">
-            {streamingText || <LoadingIndicator />}
-          </div>
+          streamingText ? (
+            <div className="prose prose-sm max-w-none text-gray-700">
+              <Markdown>{streamingText}</Markdown>
+            </div>
+          ) : (
+            <LoadingIndicator />
+          )
         )}
         {isLoading && streamingText === null && <LoadingIndicator />}
         <div ref={bottomRef} />
