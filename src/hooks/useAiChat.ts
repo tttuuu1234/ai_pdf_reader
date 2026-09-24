@@ -2,8 +2,8 @@ import { useCallback, useRef, useState } from 'react'
 import type { Message } from '../types'
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string
-const MODEL = 'gemini-2.5-flash'
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse&key=${API_KEY}`
+const MODEL = 'gemini-3.8-flash'
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse`
 
 type AiChatOptions = {
   ensureThread: () => Promise<string>
@@ -63,7 +63,10 @@ export function useAiChat({ ensureThread, addMessage, existingMessages }: AiChat
 
         const res = await fetch(API_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': API_KEY,
+          },
           body: JSON.stringify(body),
           signal: controller.signal,
         })

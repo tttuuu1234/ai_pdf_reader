@@ -4,7 +4,11 @@ import { db } from '../../stores/db'
 import { useChatStore } from '../../stores/useChatStore'
 import { truncate } from '../../lib/truncate'
 
-export function HistoryTab() {
+type Props = {
+  onOpenThread: () => void
+}
+
+export function HistoryTab({ onOpenThread }: Props) {
   const activeDocId = useChatStore((s) => s.activeDocId)
   const selectTerm = useChatStore((s) => s.selectTerm)
   const [search, setSearch] = useState('')
@@ -62,7 +66,7 @@ export function HistoryTab() {
           filtered.map((t) => (
             <button
               key={t.id}
-              onClick={() => selectTerm(t.term)}
+              onClick={() => { selectTerm(t.term); onOpenThread() }}
               className="w-full border-b border-gray-50 px-4 py-3 text-left hover:bg-gray-50"
             >
               <div className="flex items-baseline justify-between">

@@ -64,7 +64,7 @@ export function ChatPanel() {
       </div>
 
       {/* コンテンツ */}
-      {activeTab === 'conversation' ? <ConversationTab /> : <HistoryTab />}
+      {activeTab === 'conversation' ? <ConversationTab /> : <HistoryTab onOpenThread={() => setActiveTab('conversation')} />}
     </div>
   )
 }

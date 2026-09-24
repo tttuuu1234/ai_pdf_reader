@@ -8,7 +8,7 @@ import { MessageBubble } from './MessageBubble'
 
 export function ConversationTab() {
   const selectedTerm = useChatStore((s) => s.selectedTerm)
-  const { messages, ensureThread, addMessage, normalizedTerm } = useThread()
+  const { thread, messages, ensureThread, addMessage, normalizedTerm, threadResolved } = useThread()
   const { sendMessage, streamingText, isLoading, error, clearError } = useAiChat({
     ensureThread,
     addMessage,
@@ -19,17 +19,17 @@ export function ConversationTab() {
   const bottomRef = useRef<HTMLDivElement>(null)
   const hasAutoAsked = useRef<string | null>(null)
 
-  // 新しい用語選択時に自動質問
+  // 新しい用語選択時に自動質問（既存スレッドがない場合のみ）
   useEffect(() => {
     if (!normalizedTerm || !selectedTerm) return
+    if (!threadResolved) return
+    if (thread) return
     if (hasAutoAsked.current === normalizedTerm) return
-    // 既にメッセージがある（既存スレッド）なら自動質問しない
-    if (messages.length > 0) return
 
     hasAutoAsked.current = normalizedTerm
     const question = `「${selectedTerm}」とは何ですか？分かりやすく説明してください。`
     sendMessage(question, selectedTerm)
-  }, [normalizedTerm, selectedTerm, messages.length, sendMessage])
+  }, [normalizedTerm, selectedTerm, threadResolved, thread, sendMessage])
 
   // メッセージ追加時にスクロール
   useEffect(() => {

@@ -89,8 +89,13 @@ export function useThread() {
     return msg
   }
 
+  // existingThread が undefined = liveQuery 未完了、null = 検索済み・該当なし
+  const threadResolved = existingThread !== undefined
+
   return {
     thread: existingThread ?? null,
+    /** スレッド検索が完了したかどうか。 */
+    threadResolved,
     messages: messages ?? [],
     ensureThread,
     addMessage,
