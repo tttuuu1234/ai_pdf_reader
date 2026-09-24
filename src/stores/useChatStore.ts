@@ -33,7 +33,7 @@ type ChatStore = {
 
 export const useChatStore = create<ChatStore>((set) => ({
   isPanelOpen: false,
-  panelSize: '1/3',
+  panelSize: '1/2',
   panelTab: 'conversation',
   selectedTerm: null,
   activeThreadId: null,

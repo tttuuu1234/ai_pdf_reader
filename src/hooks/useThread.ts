@@ -18,11 +18,12 @@ export function useThread() {
 
   const normalizedTerm = selectedTerm ? normalizeTerm(selectedTerm) : null
 
-  // 既存スレッドの検索
+  // 既存スレッドの検索（未解決=undefined、該当なし=null を区別する）
   const existingThread = useLiveQuery(
-    () => {
+    async () => {
       if (!activeDocId || !normalizedTerm) return undefined
-      return db.threads.where('[docId+term]').equals([activeDocId, normalizedTerm]).first()
+      const t = await db.threads.where('[docId+term]').equals([activeDocId, normalizedTerm]).first()
+      return t ?? null
     },
     [activeDocId, normalizedTerm],
   )
