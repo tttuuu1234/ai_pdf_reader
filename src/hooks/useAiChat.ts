@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react'
 import type { Message } from '../types'
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string
-const MODEL = 'gemini-3.8-flash'
+const MODEL = 'gemini-3.5-flash-lite'
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse`
 
 type AiChatOptions = {
