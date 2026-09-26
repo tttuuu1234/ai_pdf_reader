@@ -12,6 +12,7 @@ import type { Message, Thread } from '../types'
  */
 export function useThread() {
   const selectedTerm = useChatStore((s) => s.selectedTerm)
+  const selectedTermPage = useChatStore((s) => s.selectedTermPage)
   const activeDocId = useChatStore((s) => s.activeDocId)
   const activeThreadId = useChatStore((s) => s.activeThreadId)
   const setActiveThreadId = useChatStore((s) => s.setActiveThreadId)
@@ -68,6 +69,7 @@ export function useThread() {
       id: nanoid(),
       docId: activeDocId,
       term: normalizedTerm,
+      pageNumber: selectedTermPage ?? undefined,
       createdAt: Date.now(),
     }
     await db.threads.add(thread)

@@ -3,14 +3,15 @@ import { useChatStore } from '../../stores/useChatStore'
 type Props = {
   text: string
   rect: { top: number; left: number }
+  pageNumber: number
   onClose: () => void
 }
 
-export function SelectionPopup({ text, rect, onClose }: Props) {
+export function SelectionPopup({ text, rect, pageNumber, onClose }: Props) {
   const selectTerm = useChatStore((s) => s.selectTerm)
 
   const handleAsk = () => {
-    selectTerm(text)
+    selectTerm(text, pageNumber)
     onClose()
   }
 

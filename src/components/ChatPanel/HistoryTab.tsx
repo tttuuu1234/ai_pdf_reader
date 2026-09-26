@@ -11,6 +11,7 @@ type Props = {
 export function HistoryTab({ onOpenThread }: Props) {
   const activeDocId = useChatStore((s) => s.activeDocId)
   const selectTerm = useChatStore((s) => s.selectTerm)
+  const setRequestedPage = useChatStore((s) => s.setRequestedPage)
   const [search, setSearch] = useState('')
 
   const threads = useLiveQuery(
@@ -80,9 +81,23 @@ export function HistoryTab({ onOpenThread }: Props) {
                   {truncate(t.lastAiText, 80)}
                 </p>
               )}
-              <p className="mt-1 text-xs text-gray-300">
-                {new Date(t.lastAt).toLocaleDateString('ja-JP')}
-              </p>
+              <div className="mt-1 flex items-center justify-between">
+                <p className="text-xs text-gray-300">
+                  {new Date(t.lastAt).toLocaleDateString('ja-JP')}
+                </p>
+                {t.pageNumber != null && (
+                  <span
+                    role="link"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setRequestedPage(t.pageNumber!)
+                    }}
+                    className="cursor-pointer rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+                  >
+                    p.{t.pageNumber}
+                  </span>
+                )}
+              </div>
             </button>
           ))
         )}

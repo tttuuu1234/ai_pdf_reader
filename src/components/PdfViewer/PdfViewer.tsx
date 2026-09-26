@@ -1,9 +1,10 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Document, Page } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
 import { db } from '../../stores/db'
+import { useChatStore } from '../../stores/useChatStore'
 import type { PdfDoc } from '../../types'
 import { PageNavigationHeader, PageSideButton } from './PageNavigation'
 import { SelectionPopup } from './SelectionPopup'
@@ -20,6 +21,8 @@ export function PdfViewer({ doc }: Props) {
   const [zoom, setZoom] = useState(0.75)
   const { selection, containerRef, clearSelection } = useTextSelection()
   const customTextRenderer = useTermHighlight(doc.id)
+  const requestedPage = useChatStore((s) => s.requestedPage)
+  const setRequestedPage = useChatStore((s) => s.setRequestedPage)
 
   const handlePageChange = useCallback(
     async (page: number) => {
@@ -29,6 +32,13 @@ export function PdfViewer({ doc }: Props) {
     },
     [doc.id, doc.pageCount],
   )
+
+  // 履歴からのページ移動リクエストを処理
+  useEffect(() => {
+    if (requestedPage === null) return
+    handlePageChange(requestedPage)
+    setRequestedPage(null)
+  }, [requestedPage, handlePageChange, setRequestedPage])
 
   if (!pdfBlob) {
     return <div className="flex flex-1 items-center justify-center text-gray-400">PDF読み込み中...</div>
@@ -64,6 +74,7 @@ export function PdfViewer({ doc }: Props) {
             <SelectionPopup
               text={selection.text}
               rect={selection.rect}
+              pageNumber={currentPage}
               onClose={clearSelection}
             />
           )}

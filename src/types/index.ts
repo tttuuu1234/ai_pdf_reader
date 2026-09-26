@@ -22,6 +22,8 @@ export type Thread = {
   docId: string
   /** 正規化済みの選択テキスト。 */
   term: string
+  /** テキストを選択したページ番号（1始まり）。 */
+  pageNumber?: number
   createdAt: number
 }
 

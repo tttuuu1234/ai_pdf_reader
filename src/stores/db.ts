@@ -15,4 +15,7 @@ db.version(1).stores({
   messages: 'id, threadId, at',
 })
 
+// pageNumber フィールドを Thread に追加（インデックス変更なし）
+db.version(2).stores({})
+
 export { db }
