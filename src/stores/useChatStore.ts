@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 export type PanelSize = '1/2' | '1/3' | '1/4'
-export type PanelTab = 'conversation' | 'history'
+export type PanelTab = 'conversation' | 'history' | 'highlights'
 
 type ChatStore = {
   /** チャットパネルが開いているかどうか。 */
@@ -27,6 +27,8 @@ type ChatStore = {
   setPanelTab: (tab: PanelTab) => void
   /** 履歴タブでパネルを開く。 */
   openHistory: () => void
+  /** マーカータブでパネルを開く。 */
+  openHighlights: () => void
   /** 用語を選択してパネルを開く。 */
   selectTerm: (term: string, pageNumber?: number) => void
   setActiveThreadId: (id: string | null) => void
@@ -52,6 +54,7 @@ export const useChatStore = create<ChatStore>((set) => ({
   setPanelSize: (size) => set({ panelSize: size }),
   setPanelTab: (tab) => set({ panelTab: tab }),
   openHistory: () => set({ isPanelOpen: true, panelTab: 'history' }),
+  openHighlights: () => set({ isPanelOpen: true, panelTab: 'highlights' }),
   selectTerm: (term, pageNumber) => set({ selectedTerm: term, selectedTermPage: pageNumber ?? null, isPanelOpen: true, panelTab: 'conversation', activeThreadId: null }),
   setActiveThreadId: (id) => set({ activeThreadId: id }),
   setActiveDocId: (id) => set({ activeDocId: id }),

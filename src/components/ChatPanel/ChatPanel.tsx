@@ -1,5 +1,6 @@
 import { useChatStore, type PanelSize } from '../../stores/useChatStore'
 import { ConversationTab } from './ConversationTab'
+import { HighlightTab } from './HighlightTab'
 import { HistoryTab } from './HistoryTab'
 
 const sizes: PanelSize[] = ['1/4', '1/3', '1/2']
@@ -36,6 +37,16 @@ export function ChatPanel() {
           >
             履歴一覧
           </button>
+          <button
+            onClick={() => setPanelTab('highlights')}
+            className={`rounded-md px-3 py-1 text-sm ${
+              panelTab === 'highlights'
+                ? 'bg-gray-200 font-medium text-gray-800'
+                : 'text-gray-500 hover:bg-gray-100'
+            }`}
+          >
+            マーカー
+          </button>
         </div>
         <div className="flex items-center gap-1">
           {/* パネル幅切替 */}
@@ -62,7 +73,9 @@ export function ChatPanel() {
       </div>
 
       {/* コンテンツ */}
-      {panelTab === 'conversation' ? <ConversationTab /> : <HistoryTab onOpenThread={() => setPanelTab('conversation')} />}
+      {panelTab === 'conversation' && <ConversationTab />}
+      {panelTab === 'history' && <HistoryTab onOpenThread={() => setPanelTab('conversation')} />}
+      {panelTab === 'highlights' && <HighlightTab />}
     </div>
   )
 }

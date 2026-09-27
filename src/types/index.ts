@@ -35,3 +35,16 @@ export type Message = {
   text: string
   at: number
 }
+
+/** マーカー（ハイライト）の色。 */
+export type HighlightColor = 'red' | 'blue' | 'yellow' | 'green' | 'orange'
+
+/** テキストマーカー（ハイライト）。 */
+export type Highlight = {
+  id: string
+  docId: string
+  pageNumber: number
+  text: string
+  color: HighlightColor
+  createdAt: number
+}
