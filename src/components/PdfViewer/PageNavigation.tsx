@@ -1,13 +1,17 @@
+import { TableOfContents, type OutlineItem } from './TableOfContents'
+
 type HeaderProps = {
   currentPage: number
   pageCount: number
   zoom: number
   onZoomChange: (zoom: number) => void
+  outline: OutlineItem[]
+  onPageChange: (page: number) => void
 }
 
 const ZOOM_STEPS = [0.5, 0.75, 1, 1.25, 1.5, 2]
 
-export function PageNavigationHeader({ currentPage, pageCount, zoom, onZoomChange }: HeaderProps) {
+export function PageNavigationHeader({ currentPage, pageCount, zoom, onZoomChange, outline, onPageChange }: HeaderProps) {
   const zoomIn = () => {
     const next = ZOOM_STEPS.find((s) => s > zoom)
     if (next) onZoomChange(next)
@@ -20,9 +24,12 @@ export function PageNavigationHeader({ currentPage, pageCount, zoom, onZoomChang
 
   return (
     <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-2">
-      <span className="text-sm text-gray-700">
-        {currentPage} / {pageCount}
-      </span>
+      <div className="flex items-center gap-2">
+        <TableOfContents outline={outline} onPageChange={onPageChange} />
+        <span className="text-sm text-gray-700">
+          {currentPage} / {pageCount}
+        </span>
+      </div>
       <div className="flex items-center gap-1">
         <button
           onClick={zoomOut}
