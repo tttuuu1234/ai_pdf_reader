@@ -37,11 +37,14 @@ export function useTermHighlight(docId: string, pageNumber: number) {
       let str = escapeHtml(textItem.str)
       if (terms.length === 0 && highlightList.length === 0) return str
 
-      // マーカーテキストを長い順にまとめる（同じテキストに複数色がある場合は最初の色を使用）
+      // マーカーテキストをパターンマップに追加（複数行は行ごとに分割）
       const highlightMap = new Map<string, HighlightColor>()
       for (const h of highlightList) {
-        if (!highlightMap.has(h.text)) {
-          highlightMap.set(h.text, h.color)
+        const lines = h.text.split(/\n/).map((l) => l.trim()).filter((l) => l.length > 0)
+        for (const line of lines) {
+          if (!highlightMap.has(line)) {
+            highlightMap.set(line, h.color)
+          }
         }
       }
 
@@ -50,27 +53,29 @@ export function useTermHighlight(docId: string, pageNumber: number) {
       for (const t of terms) allTexts.add(t)
       for (const t of highlightMap.keys()) allTexts.add(t)
 
-      if (allTexts.size === 0) return str
+      if (allTexts.size > 0) {
+        const sorted = [...allTexts].sort((a, b) => b.length - a.length)
+        const pattern = sorted.map(escapeRegex).join('|')
+        const regex = new RegExp(`(${pattern})`, 'gi')
 
-      const sorted = [...allTexts].sort((a, b) => b.length - a.length)
-      const pattern = sorted.map(escapeRegex).join('|')
-      const regex = new RegExp(`(${pattern})`, 'gi')
+        str = str.replace(regex, (match) => {
+          const isTerm = terms.some((t) => t.toLowerCase() === match.toLowerCase())
+          const highlightColor = highlightMap.get(match)
 
-      return str.replace(regex, (match) => {
-        const isTerm = terms.some((t) => t.toLowerCase() === match.toLowerCase())
-        const highlightColor = highlightMap.get(match)
+          const styles: string[] = []
+          if (isTerm) {
+            styles.push('border-bottom: 2px dotted #3b82f6', 'cursor: pointer')
+          }
+          if (highlightColor) {
+            styles.push(`background-color: ${HIGHLIGHT_BG[highlightColor]}`)
+          }
 
-        const styles: string[] = []
-        if (isTerm) {
-          styles.push('border-bottom: 2px dotted #3b82f6', 'cursor: pointer')
-        }
-        if (highlightColor) {
-          styles.push(`background-color: ${HIGHLIGHT_BG[highlightColor]}`)
-        }
+          if (styles.length === 0) return match
+          return `<span style="${styles.join('; ')}">${match}</span>`
+        })
+      }
 
-        if (styles.length === 0) return match
-        return `<span style="${styles.join('; ')}">${match}</span>`
-      })
+      return str
     },
     [terms, highlightList],
   )

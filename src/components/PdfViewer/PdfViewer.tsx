@@ -31,9 +31,10 @@ export function PdfViewer({ doc }: Props) {
     async (page: number) => {
       if (page < 1 || page > doc.pageCount) return
       setCurrentPage(page)
+      containerRef.current?.scrollTo(0, 0)
       await db.docs.update(doc.id, { currentPage: page })
     },
-    [doc.id, doc.pageCount],
+    [doc.id, doc.pageCount, containerRef],
   )
 
   // PDF読み込み時に目次データを取得
