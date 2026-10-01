@@ -22,7 +22,7 @@ export function PdfViewer({ doc }: Props) {
   const [currentPage, setCurrentPage] = useState(doc.currentPage)
   const [zoom, setZoom] = useState(0.75)
   const { selection, containerRef, clearSelection } = useTextSelection()
-  const customTextRenderer = useTermHighlight(doc.id, currentPage)
+  const { customTextRenderer, onGetTextSuccess } = useTermHighlight(doc.id, currentPage)
   const [outline, setOutline] = useState<OutlineItem[]>([])
   const requestedPage = useChatStore((s) => s.requestedPage)
   const setRequestedPage = useChatStore((s) => s.setRequestedPage)
@@ -110,6 +110,7 @@ export function PdfViewer({ doc }: Props) {
                 pageNumber={currentPage}
                 width={800 * zoom}
                 customTextRenderer={customTextRenderer}
+                onGetTextSuccess={onGetTextSuccess}
               />
             </Document>
           </div>
